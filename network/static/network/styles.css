@@ -1,6 +1,9 @@
+.card {
+  border-radius: 15px;
+}
 div#index form {
   /* border: 1px solid gray; */
-  border-radius: 15px;
+
   padding: 1.5rem;
 }
 div#index form input[type='submit'] {

@@ -9,16 +9,17 @@ from .models import User, Post
 
 
 def index(request):
-    if request.method == "Post":
+    if request.method == "POST":
         content = request.POST["content"]
+        print(content)
         post = Post(content=content, user=request.user, timestamp=timezone.now())
         print(post)
         post.save()
         return redirect("index")
     
-
-    posts = Post.objects.all()
-    # print(posts)
+ 
+    posts = Post.objects.all().order_by("-timestamp")
+    print(posts)
     return render(request, "network/index.html", {"posts": posts})
 
 

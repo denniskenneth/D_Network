@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, User, Follow, Like
+from .models import  User, Post, Follow, Like
 
 # Register your models here.
 
