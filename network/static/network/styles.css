@@ -9,3 +9,20 @@ div#index form {
 div#index form input[type='submit'] {
   width: 5%;
 }
+h4 span.text-muted {
+  font-size: 0.7rem;
+}
+a {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color from parent */
+}
+a.red-link:hover {
+  color: red; /* Custom color on hover */
+}
+i.fa-heart {
+  font-size: 1.3rem;
+}
+a.red-link + span {
+  font-size: 1rem;
+  font-weight: 200;
+}
