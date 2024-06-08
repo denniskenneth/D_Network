@@ -3,7 +3,6 @@
 }
 div#index form {
   /* border: 1px solid gray; */
-
   padding: 1.5rem;
 }
 div#index form input[type='submit'] {
@@ -23,6 +22,16 @@ i.fa-heart {
   font-size: 1.3rem;
 }
 a.red-link + span {
+  font-size: 1rem;
+  font-weight: 200;
+}
+
+#user-data p {
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+#user-data p > span {
   font-size: 1rem;
   font-weight: 200;
 }

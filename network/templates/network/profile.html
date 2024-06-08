@@ -1,0 +1,22 @@
+{% extends "network/layout.html" %} {% block body %}
+<div class="container">
+  <div class="d-flex flex-row">
+    <div id="user-data" class="flex-fill align-self-center">
+      <p>
+        {{user.username | title}}
+        <span id="email-text" class="text-muted">{{user.email}}</span>
+      </p>
+    </div>
+    <div id="follow-count" class="d-flex flex-fill">
+      <div class="col align-self-center">
+        <p class="text-center">0</p>
+        <p class="text-center">Follwers</p>
+      </div>
+      <div class="col align-self-center">
+        <p class="text-center">0</p>
+        <p class="text-center">Following</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
