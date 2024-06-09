@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 
@@ -76,5 +76,9 @@ def register(request):
     
 
 
-def profile(request):
-    return render(request, "network/profile.html")
+def profile(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    posts = user.user_post.all().order_by('-timestamp')
+    return render(request, "network/profile.html", {
+        "posts": posts,
+    })

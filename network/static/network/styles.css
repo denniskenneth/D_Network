@@ -30,8 +30,12 @@ a.red-link + span {
   font-size: 2rem;
   font-weight: 500;
   margin-bottom: 0;
+  display: inline-block;
 }
 #user-data p > span {
   font-size: 1rem;
   font-weight: 200;
+}
+#follow-count p {
+  margin-bottom: 0;
 }
