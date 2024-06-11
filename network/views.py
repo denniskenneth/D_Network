@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import User, Post
+from .models import User, Post, Follow
 
 
 def index(request):
@@ -78,7 +78,16 @@ def register(request):
 
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
+    is_profile = request.user == user
+    is_following = Follow.objects.filter(user=request.user, followed=user).exists()
+    following_count = user.user_following.count()
+    followers_count = user.user_followed.count()
     posts = user.user_post.all().order_by('-timestamp')
     return render(request, "network/profile.html", {
+        "user1":user,
         "posts": posts,
+        "is_profile": is_profile,
+        "following_count": following_count,
+        "follower_count": followers_count,
+        "is_following": is_following,
     })

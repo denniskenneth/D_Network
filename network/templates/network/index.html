@@ -21,7 +21,7 @@
     <div class="card mt-3">
       <div class="card-body">
         <h4>
-          {{post.user.username}}
+          <a href="{% url "profile" post.user.id %}">{{post.user.username}}</a>
           <span class="text-muted"
             >{{ post.timestamp|date:"F d, Y, H:i a" }}</span
           >
