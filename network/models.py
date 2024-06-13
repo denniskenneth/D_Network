@@ -28,4 +28,4 @@ class Follow(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.follower} follows {self.user}"
+        return f"{self.user} follows {self.followed}"

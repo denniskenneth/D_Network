@@ -1,16 +1,30 @@
 {% extends "network/layout.html" %} {% block body %}
 <div class="container">
   <div class="mt-3 d-flex flex-row">
-    <div id="user-data" class="flex-fill align-self-center">
+    <div id="user-data" class="flex-fill d-flex align-self-center">
       <p>
         {{user1.username | title}}
-        <span id="email-text" class="text-muted">{{user.email}}</span>
+        <span id="email-text" class="text-muted">{{user1.email}}</span>
       </p>
-      {% if not is_profile %} {% if is_following %}
-      <input class="btn btn-outline-danger ml-5" type="button" value="Follow" />
-      {% else %}
-      <input class="btn btn-outline-dark ml-5" type="button" value="Follow" />
-      {% endif %} {% endif %}
+      <form id="follow_form" action="" class="d-inline-block">
+        {% csrf_token %} {% if not is_profile %} {% if is_following %}
+        <input
+          class="btn btn-outline-danger ml-5"
+          data-user-id="{{user1.id}}"
+          type="button"
+          value="Unfollow"
+          id="follow_btn"
+        />
+        {% else %}
+        <input
+          class="btn btn-outline-dark ml-5"
+          data-user-id="{{user1.id}}"
+          type="button"
+          id="follow_btn"
+          value="Follow"
+        />
+        {% endif %} {% endif %}
+      </form>
     </div>
 
     <div id="follow-count" class="d-flex flex-fill">

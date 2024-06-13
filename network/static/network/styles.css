@@ -39,3 +39,6 @@ a.red-link + span {
 #follow-count p {
   margin-bottom: 0;
 }
+form#follow_form {
+  display: inline-block;
+}

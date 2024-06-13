@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -91,3 +91,31 @@ def profile(request, user_id):
         "follower_count": followers_count,
         "is_following": is_following,
     })
+
+def follow(request, user_id):
+    if request.method == "POST":
+        
+        try:
+            user = get_object_or_404(User, pk=user_id)
+            # Attempt to create a follow relationship
+            follow, created = Follow.objects.get_or_create(user=request.user, followed=user)
+            if created:
+                # The follow relationship was successfully created
+                message = "You are now following this user."
+                status = 201  # Created
+            else:
+                # The follow relationship already exists
+
+                follow.delete()
+                message = "You are already following this user."
+                status = 200  # OK
+
+            return JsonResponse({"message": message}, status=status)
+       
+        except User.DoesNotExist:
+                return JsonResponse({"error": "User does not exist."}, status=404)
+            
+        except Exception as e:
+            return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Invalid request method."}, status=405)  # Method Not Allowed
