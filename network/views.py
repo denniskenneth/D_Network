@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User, Post, Follow
 
@@ -21,6 +22,8 @@ def index(request):
     posts = Post.objects.all().order_by("-timestamp")
     print(posts)
     return render(request, "network/index.html", {"posts": posts})
+
+
 
 
 def login_view(request):
@@ -119,3 +122,40 @@ def follow(request, user_id):
             return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Invalid request method."}, status=405)  # Method Not Allowed
+
+
+def posts(request, page_name):
+    try:
+        # Check if the request is for all posts
+        if page_name == "all":
+            # Retrieve all posts ordered by timestamp in descending order
+            posts = Post.objects.all().order_by("-timestamp")
+        else:
+            # Retrieve posts for a specific user
+            # Get the list of users the current user is following
+            following_users = request.user.user_following.all().values_list('followed', flat=True)
+            
+            # Filter posts to include only those from the followed users
+            posts = Post.objects.filter(user__in=following_users).order_by("-timestamp")
+
+        # Serialize the posts data
+        posts_data = [
+            {
+                "id": post.id,
+                "content": post.content,
+                "user": post.user.username,
+                "timestamp": post.timestamp,
+            }
+            for post in posts
+        ]
+
+        # Return the serialized data as JSON with a 200 status code
+        return JsonResponse(posts_data, safe=False, status=200)
+
+    except ObjectDoesNotExist:
+        # Handle the case where the user does not exist
+        return JsonResponse({"error": "User not found"}, status=404)
+
+    except Exception as e:
+        # Handle any other exceptions
+        return JsonResponse({"error": str(e)}, status=500)
