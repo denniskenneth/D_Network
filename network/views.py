@@ -5,10 +5,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+
 
 from .models import User, Post, Follow
 
-
+def paginator(posts, page):
+     paginator = Paginator(posts, 1)
+     page_posts = paginator.get_page(page)
+     return page_posts
+    
 def index(request):
     if request.method == "POST":
         content = request.POST["content"]
@@ -18,10 +25,21 @@ def index(request):
         post.save()
         return redirect("index")
     
- 
+    
+
+
     posts = Post.objects.all().order_by("-timestamp")
-    print(posts)
-    return render(request, "network/index.html", {"posts": posts})
+
+    # Pagination
+    page = request.GET.get("page")
+    page_posts = paginator(posts,page)
+    
+    # page_posts = paginator.get_page(page)
+    # print(page_posts)
+    return render(request, "network/index.html", {
+        # "posts": posts,
+        "page_posts": page_posts,
+        })
 
 
 
@@ -78,7 +96,7 @@ def register(request):
         return render(request, "network/register.html")
     
 
-
+@login_required
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     is_profile = request.user == user
@@ -86,13 +104,19 @@ def profile(request, user_id):
     following_count = user.user_following.count()
     followers_count = user.user_followed.count()
     posts = user.user_post.all().order_by('-timestamp')
+
+    # Pagination
+    page = request.GET.get("page")
+    page_posts = paginator(posts,page)
+
     return render(request, "network/profile.html", {
         "user1":user,
-        "posts": posts,
+        # "posts": posts,
         "is_profile": is_profile,
         "following_count": following_count,
         "follower_count": followers_count,
         "is_following": is_following,
+        "page_posts": page_posts,
     })
 
 def follow(request, user_id):
