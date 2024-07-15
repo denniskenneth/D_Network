@@ -71,19 +71,21 @@ function card() {
 }
 
 function posts(pageName) {
-  fetch(`/posts/${pageName}/`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((posts) => {
-      card();
-      posts.forEach((post) => console.log(post.id));
-    })
-    .catch((error) => console.log(error.message));
-  console.log(pageName);
+  // fetch(`/posts/${pageName}/`)
+  //   .then((response) => {
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     return response.json();
+  //   })
+  //   .then((posts) => {
+  //     card();
+  //     posts.forEach((post) => console.log(post.id));
+  //   })
+  //   .catch((error) => console.log(error.message));
+  // console.log(pageName);
+  // fetch(`/postsroute`)
+  //   .then()
 }
 
 function getCookie(name) {

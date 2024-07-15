@@ -31,12 +31,12 @@
           </li>
           {% endif %}
           <li id="allPosts" class="nav-item">
-            <a  class="nav-link" href="#">All Posts</a>
+            <a  class="nav-link" href="{% url "posts_route" 'all' %}">All Posts</a>
             
           </li>
           {% if user.is_authenticated %}
           <li id="fllwnPosts" class="nav-item">
-            <a class="nav-link" href="#">Following</a>
+            <a class="nav-link" href="{% url "posts_route" 'following' %}">Following</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Log Out</a>

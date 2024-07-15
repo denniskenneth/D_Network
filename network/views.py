@@ -148,8 +148,22 @@ def follow(request, user_id):
     return JsonResponse({"error": "Invalid request method."}, status=405)  # Method Not Allowed
 
 
+def posts_route(request, page_name):
+    if page_name == 'all' or page_name == "following":
+        
+        main_posts = posts(request, page_name)
+        return render(request, "network/posts.html", {
+                "posts": main_posts,
+                "page_name": page_name.capitalize()
+            }
+            )
+
+    return render(request, "network/error.html")
+
+
 def posts(request, page_name):
-    try:
+        posts = []
+    # try:
         # Check if the request is for all posts
         if page_name == "all":
             # Retrieve all posts ordered by timestamp in descending order
@@ -163,23 +177,24 @@ def posts(request, page_name):
             posts = Post.objects.filter(user__in=following_users).order_by("-timestamp")
 
         # Serialize the posts data
-        posts_data = [
-            {
-                "id": post.id,
-                "content": post.content,
-                "user": post.user.username,
-                "timestamp": post.timestamp,
-            }
-            for post in posts
-        ]
+        # posts_data = [
+        #     {
+        #         "id": post.id,
+        #         "content": post.content,
+        #         "user": post.user.username,
+        #         "timestamp": post.timestamp,
+        #     }
+        #     for post in posts
+        # ]
 
         # Return the serialized data as JSON with a 200 status code
-        return JsonResponse(posts_data, safe=False, status=200)
+        return posts
+    # JsonResponse(posts_data, safe=False, status=200)
 
-    except ObjectDoesNotExist:
-        # Handle the case where the user does not exist
-        return JsonResponse({"error": "User not found"}, status=404)
+    # except ObjectDoesNotExist:
+    #     # Handle the case where the user does not exist
+    #     return JsonResponse({"error": "User not found"}, status=404)
 
-    except Exception as e:
-        # Handle any other exceptions
-        return JsonResponse({"error": str(e)}, status=500)
+    # except Exception as e:
+    #     # Handle any other exceptions
+    #     return JsonResponse({"error": str(e)}, status=500)
