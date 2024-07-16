@@ -151,10 +151,16 @@ def follow(request, user_id):
 def posts_route(request, page_name):
     if page_name == 'all' or page_name == "following":
         
-        main_posts = posts(request, page_name)
+        postss = posts(request, page_name)
+
+        # Pagination
+        page = request.GET.get("page")
+        page_posts = paginator(postss,page)
+
         return render(request, "network/posts.html", {
-                "posts": main_posts,
-                "page_name": page_name.capitalize()
+                "page_posts": postss,
+                "page_name": page_name.capitalize(),
+                "page_posts": page_posts,
             }
             )
 
