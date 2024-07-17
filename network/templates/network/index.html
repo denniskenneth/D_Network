@@ -1,8 +1,8 @@
 {% extends "network/layout.html" %} {% block body %}
-<div class="py-2 px-4" id="index">
- 
+<div class="container py-2 px-4" id="index">
+  <h1 class="text-center">All Post</h1>
   {% if user.is_authenticated %}
-  <form action="{% url 'index' %}" method="post" id="new_post" class="card">
+  <form class="bg-light" action="{% url 'index' %}" method="post" id="new_post" class="card">
     {% csrf_token %}
     <div class="form-group">
       <textarea
@@ -16,19 +16,40 @@
     <input class="btn btn-primary" type="submit" value="Post" />
   </form>
   {% endif %}
-  <div id="posts" class="d-flex flex-column">
-    <h1>All Post</h1>
+  <div id="posts" class="  d-flex flex-column">
+    
     {% for post in page_posts %}
-    <div class="card mt-3">
+    <div class="bg-light card mt-3">
       <div class="card-body">
-        <h4>
-          <a href="{% url "profile" post.user.id %}">{{post.user.username}}</a>
-          <span class="text-muted">{{ post.timestamp|date:"F d, Y, H:i a" }}</span>
-        </h4>
-        <p class="card-text">{{post.content}}</p>
+        <div class="d-flex justify-content-between">
+          <h4>
+            <a href="{% url "profile" post.user.id %}">{{post.user.username | title}}</a>
+            <span class="text-muted">{{ post.timestamp|date:"F d, Y, H:i a" }}</span>
+            
+          </h4>
+          {% if post.user == user %}
+            <button type="button" id="edit_btn" class="btn btn-dark">Edit</button>
+            {% endif %}
+        </div>
+        <div id="cardContent">
+          <p class="card-text">{{post.content}}</p>
 
-        <a href="#" class="red-link"><i class="fa-regular fa-heart"></i></a>
-        <span class="ml-1">0</span>
+          <a href="#" class="red-link"><i class="fa-regular fa-heart"></i></a>
+          <span class="ml-1">0</span>
+        </div>
+        <form id="postEditForm" class="bg-light" action="{% url 'index' %}" method="post" id="new_post" class="card">
+          {% csrf_token %}
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              name="content"
+              rows="3"
+              placeholder="Enter Post"
+            ></textarea>
+          </div>
+        </form>
+
       </div>
     </div>
     

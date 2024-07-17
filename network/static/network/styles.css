@@ -1,3 +1,17 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+div.body {
+  height: 100%;
+  /* background-image: url('./images/Seamless\ Abstract\ Monochrome\ Engraving\ Pattern\ Texture\ Stock\ Vector\ \(Royalty\ Free\)\ 576319531\ _\ Shutterstock.jpeg'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .card {
   border-radius: 15px;
 }
@@ -41,4 +55,8 @@ a.red-link + span {
 }
 form#follow_form {
   display: inline-block;
+}
+
+form#postEditForm {
+  display: none;
 }

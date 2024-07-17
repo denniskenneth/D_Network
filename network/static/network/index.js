@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   allPostBtn.addEventListener('click', () => posts('all'));
   fllwnPostBtn.addEventListener('click', (e) => posts('following'));
+  document
+    .querySelector('#edit_btn')
+    .addEventListener('click', (e) => editToSaveBtn(e.target));
 });
 
 function follow(user_id) {
@@ -102,4 +105,22 @@ function getCookie(name) {
     }
   }
   return cookieValue;
+}
+
+function editToSaveBtn(btn) {
+  const editForm = document.querySelector('#postEditForm');
+  const cardContent = document.querySelector('#cardContent');
+
+  if (btn.textContent == 'Save') {
+    btn.textContent = 'Edit';
+
+    editForm.style.display = 'none';
+
+    cardContent.style.display = 'block';
+  } else {
+    btn.textContent = 'Save';
+    cardContent.style.display = 'none';
+
+    editForm.style.display = 'block';
+  }
 }
