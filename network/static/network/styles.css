@@ -57,6 +57,9 @@ form#follow_form {
   display: inline-block;
 }
 
-form#postEditForm {
+/* form#postEditForm {
+  display: none;
+} */
+.hide {
   display: none;
 }

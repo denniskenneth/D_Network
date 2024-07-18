@@ -32,23 +32,23 @@
             {% endif %}
         </div>
         <div id="cardContent">
-          <p class="card-text">{{post.content}}</p>
+          <p id="postContent" class="card-text">{{post.content}}</p>
 
           <a href="#" class="red-link"><i class="fa-regular fa-heart"></i></a>
           <span class="ml-1">0</span>
         </div>
-        <form id="postEditForm" class="bg-light" action="{% url 'index' %}" method="post" id="new_post" class="card">
-          {% csrf_token %}
-          <div class="form-group">
+        <div id="postEditForm" class="bg-light hide my-3"   class="card">
+
+
             <textarea
               class="form-control"
-              id="exampleFormControlTextarea1"
+              id="postEditTxtAra"
               name="content"
               rows="3"
-              placeholder="Enter Post"
+              placeholder="Edit Post"
             ></textarea>
-          </div>
-        </form>
+          
+        </div>
 
       </div>
     </div>

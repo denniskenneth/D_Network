@@ -1,18 +1,45 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const followBtn = document.querySelector('#follow_btn');
-  const allPostBtn = document.querySelector('#allPosts');
-  const fllwnPostBtn = document.querySelector('#fllwnPosts');
+  // const followBtn = document.querySelector('#follow_btn');
+  // const allPostBtn = document.querySelector('#allPosts');
+  // const fllwnPostBtn = document.querySelector('#fllwnPosts');
 
-  if (followBtn != null) {
+  // Event delegation for edit buttons
+  document.addEventListener('click', function (event) {
+    const btn = event.target;
+    // console.log(btn.id === 'edit_btn');
+
+    // Handle click on edit button
+    if (btn.id === 'edit_btn') {
+      const card = btn.closest('.card');
+      const editForm = card.querySelector('#postEditForm');
+      const cardContent = card.querySelector('#cardContent');
+      const textarea = editForm.querySelector('.form-control');
+      const postContent = cardContent.querySelector('.card-text');
+
+      // Toggle edit mode
+      editToSaveBtn(btn, editForm, cardContent, textarea, postContent);
+    }
+  });
+
+  // Event listener for follow button (assuming followBtn is present)
+  const followBtn = document.querySelector('#follow_btn');
+  if (followBtn) {
     followBtn.addEventListener('click', (e) =>
       follow(followBtn.dataset.userId)
     );
   }
-  allPostBtn.addEventListener('click', () => posts('all'));
-  fllwnPostBtn.addEventListener('click', (e) => posts('following'));
-  document
-    .querySelector('#edit_btn')
-    .addEventListener('click', (e) => editToSaveBtn(e.target));
+
+  // Event listeners for posts filtering buttons
+  const allPostBtn = document.querySelector('#allPosts');
+  const fllwnPostBtn = document.querySelector('#fllwnPosts');
+
+  if (allPostBtn) {
+    allPostBtn.addEventListener('click', () => posts('all'));
+  }
+
+  if (fllwnPostBtn) {
+    fllwnPostBtn.addEventListener('click', () => posts('following'));
+  }
 });
 
 function follow(user_id) {
@@ -107,20 +134,23 @@ function getCookie(name) {
   return cookieValue;
 }
 
-function editToSaveBtn(btn) {
-  const editForm = document.querySelector('#postEditForm');
-  const cardContent = document.querySelector('#cardContent');
+function editToSaveBtn(btn, editForm, cardContent, textarea, p_postContent) {
+  // const editForm = document.querySelector('#postEditForm');
+  // const cardContent = document.querySelector('#cardContent');
+  // const textarea = document.querySelector('#postEditTxtAra');
+  // const p_postContent = document.querySelector('#postContent');
 
+  // Toggle edit mode
   if (btn.textContent == 'Save') {
     btn.textContent = 'Edit';
-
-    editForm.style.display = 'none';
-
-    cardContent.style.display = 'block';
+    editForm.classList.toggle('hide');
+    cardContent.classList.toggle('hide');
   } else {
     btn.textContent = 'Save';
-    cardContent.style.display = 'none';
-
-    editForm.style.display = 'block';
+    // cardContent.style.display = 'none';
+    cardContent.classList.toggle('hide');
+    console.log(p_postContent);
+    textarea.value = p_postContent.textContent;
+    editForm.classList.toggle('hide');
   }
 }

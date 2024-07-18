@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Post, Follow
 
 def paginator(posts, page):
-     paginator = Paginator(posts, 1)
+     paginator = Paginator(posts, 10)
      page_posts = paginator.get_page(page)
      return page_posts
     
