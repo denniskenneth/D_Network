@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+import json
 
 
 from .models import User, Post, Follow
@@ -24,6 +25,22 @@ def index(request):
         print(post)
         post.save()
         return redirect("index")
+    elif request.method == "PUT":
+
+        try:
+            data = json.loads(request.body)
+
+            post_id = data.get("post_id")
+            content = data.get("content")
+            post = Post.objects.get(pk=post_id,)
+            post.content = content
+            post.save()
+            print (post.content);
+            return JsonResponse({"status": "success"}, status=200)
+        except Post.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Post not found."}, status=404)
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
     
     
 
@@ -165,6 +182,7 @@ def posts_route(request, page_name):
             )
 
     return render(request, "network/error.html")
+
 
 
 def posts(request, page_name):

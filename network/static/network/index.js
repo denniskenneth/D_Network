@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded', function () {
       const cardContent = card.querySelector('#cardContent');
       const textarea = editForm.querySelector('.form-control');
       const postContent = cardContent.querySelector('.card-text');
+      const post_id = btn.dataset.postId;
 
       // Toggle edit mode
-      editToSaveBtn(btn, editForm, cardContent, textarea, postContent);
+      editToSaveBtn(btn, editForm, cardContent, textarea, postContent, post_id);
     }
   });
 
@@ -134,7 +135,14 @@ function getCookie(name) {
   return cookieValue;
 }
 
-function editToSaveBtn(btn, editForm, cardContent, textarea, p_postContent) {
+function editToSaveBtn(
+  btn,
+  editForm,
+  cardContent,
+  textarea,
+  p_postContent,
+  post_id
+) {
   // const editForm = document.querySelector('#postEditForm');
   // const cardContent = document.querySelector('#cardContent');
   // const textarea = document.querySelector('#postEditTxtAra');
@@ -142,15 +150,47 @@ function editToSaveBtn(btn, editForm, cardContent, textarea, p_postContent) {
 
   // Toggle edit mode
   if (btn.textContent == 'Save') {
-    btn.textContent = 'Edit';
-    editForm.classList.toggle('hide');
-    cardContent.classList.toggle('hide');
+    let result = saveEdit(p_postContent, post_id, textarea);
+
+    if (result) {
+      btn.textContent = 'Edit';
+      editForm.classList.toggle('hide');
+      cardContent.classList.toggle('hide');
+    }
   } else {
     btn.textContent = 'Save';
     // cardContent.style.display = 'none';
     cardContent.classList.toggle('hide');
-    console.log(p_postContent);
-    textarea.value = p_postContent.textContent;
+
+    textarea.value = p_postContent.textContent.trim();
     editForm.classList.toggle('hide');
   }
+}
+
+function saveEdit(content, post_id, textarea) {
+  fetch(``, {
+    method: 'PUT',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    body: JSON.stringify({
+      content: textarea.value,
+      post_id: post_id,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 'success') {
+        content.textContent = textarea.value;
+      } else {
+        console.error('Update failed', data.message);
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      return false;
+    });
+
+  return true;
 }

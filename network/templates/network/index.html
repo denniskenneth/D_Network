@@ -28,7 +28,7 @@
             
           </h4>
           {% if post.user == user %}
-            <button type="button" id="edit_btn" class="btn btn-dark">Edit</button>
+            <button type="button" data-post-id="{{ post.id }}" id="edit_btn" class="btn btn-dark">Edit</button>
             {% endif %}
         </div>
         <div id="cardContent">
