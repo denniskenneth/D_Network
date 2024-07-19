@@ -168,7 +168,7 @@ function editToSaveBtn(
 }
 
 function saveEdit(content, post_id, textarea) {
-  fetch(``, {
+  fetch(`/`, {
     method: 'PUT',
     headers: {
       'X-CSRFToken': getCookie('csrftoken'),
@@ -185,10 +185,11 @@ function saveEdit(content, post_id, textarea) {
       } else {
         console.error('Update failed', data.message);
         return false;
+        ``;
       }
     })
     .catch((error) => {
-      console.error('Error:', error);
+      console.log('Error:', error);
       return false;
     });
 
