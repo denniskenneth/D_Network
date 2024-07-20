@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 import json
 
 
-from .models import User, Post, Follow
+from .models import User, Post, Follow, Like
 
 def paginator(posts, page):
      paginator = Paginator(posts, 10)
@@ -36,7 +36,7 @@ def index(request):
             post.content = content
             post.save()
             print (post.content);
-            return JsonResponse({"status": "success"}, status=200)
+            return JsonResponse({"status": "success", "data": post.content}, status=200)
         except Post.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Post not found."}, status=404)
         except Exception as e:
@@ -200,25 +200,37 @@ def posts(request, page_name):
             # Filter posts to include only those from the followed users
             posts = Post.objects.filter(user__in=following_users).order_by("-timestamp")
 
-        # Serialize the posts data
-        # posts_data = [
-        #     {
-        #         "id": post.id,
-        #         "content": post.content,
-        #         "user": post.user.username,
-        #         "timestamp": post.timestamp,
-        #     }
-        #     for post in posts
-        # ]
-
-        # Return the serialized data as JSON with a 200 status code
+       
         return posts
-    # JsonResponse(posts_data, safe=False, status=200)
+   
 
-    # except ObjectDoesNotExist:
-    #     # Handle the case where the user does not exist
-    #     return JsonResponse({"error": "User not found"}, status=404)
+def toggle_Like(request, post_id):
+    if request.method == "POST":
+        try:
+            post = get_object_or_404(Post, pk=post_id)
+            user = request.user
 
-    # except Exception as e:
-    #     # Handle any other exceptions
-    #     return JsonResponse({"error": str(e)}, status=500)
+            # Check if the user has already liked the post
+            liked = Like.objects.filter(user=user, post=post).exists()
+
+            if liked:
+                # unlike the post
+                Like.objects.filter(user=user, post=post).delete()
+                liked = False
+            else:
+                # Like the post
+                Like.objects.create(user=user, post=post)
+                liked = True
+
+            # Get the updated like count
+            like_count = post.post_like.count()
+
+            return JsonResponse({"liked": liked, "like_count":like_count})
+
+        except Post.DoesNotExist:
+            return JsonResponse({"error": "Post does not exist"}, status=404)
+        except Exception as e:
+            return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)
+
+
+    return JsonResponse({"error": "Invalid request method."}, status=405)  # Method Not Allowed

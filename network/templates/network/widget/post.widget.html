@@ -13,8 +13,8 @@
       <div id="cardContent">
         <p id="postContent" class="card-text">{{post.content}}</p>
 
-        <a href="#" class="red-link"><i class="fa-regular fa-heart"></i></a>
-        <span class="ml-1">0</span>
+        <a href="#" class="red-link like_btn" data-post-id="{{post.id}}"><i class="fa-regular fa-heart"></i></a>
+        <span class="ml-1">{{post.post_like.count}}</span>
       </div>
       <div id="postEditForm" class="bg-light hide my-3"   class="card">
 

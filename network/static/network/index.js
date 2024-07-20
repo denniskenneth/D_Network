@@ -1,8 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // const followBtn = document.querySelector('#follow_btn');
-  // const allPostBtn = document.querySelector('#allPosts');
-  // const fllwnPostBtn = document.querySelector('#fllwnPosts');
-
   // Event delegation for edit buttons
   document.addEventListener('click', function (event) {
     const btn = event.target;
@@ -41,6 +37,16 @@ document.addEventListener('DOMContentLoaded', function () {
   if (fllwnPostBtn) {
     fllwnPostBtn.addEventListener('click', () => posts('following'));
   }
+
+  // Event delegation for like buttons
+  document.addEventListener('click', function (event) {
+    const btn = event.target.closest('.like_btn');
+
+    if (btn) {
+      event.preventDefault();
+      toggleLike(btn);
+    }
+  });
 });
 
 function follow(user_id) {
@@ -143,11 +149,6 @@ function editToSaveBtn(
   p_postContent,
   post_id
 ) {
-  // const editForm = document.querySelector('#postEditForm');
-  // const cardContent = document.querySelector('#cardContent');
-  // const textarea = document.querySelector('#postEditTxtAra');
-  // const p_postContent = document.querySelector('#postContent');
-
   // Toggle edit mode
   if (btn.textContent == 'Save') {
     let result = saveEdit(p_postContent, post_id, textarea);
@@ -159,7 +160,7 @@ function editToSaveBtn(
     }
   } else {
     btn.textContent = 'Save';
-    // cardContent.style.display = 'none';
+
     cardContent.classList.toggle('hide');
 
     textarea.value = p_postContent.textContent.trim();
@@ -181,7 +182,7 @@ function saveEdit(content, post_id, textarea) {
     .then((response) => response.json())
     .then((data) => {
       if (data.status === 'success') {
-        content.textContent = textarea.value;
+        content.textContent = data.data;
       } else {
         console.error('Update failed', data.message);
         return false;
@@ -194,4 +195,28 @@ function saveEdit(content, post_id, textarea) {
     });
 
   return true;
+}
+
+function toggleLike(btn) {
+  const post_id = btn.dataset.postId;
+  const like_count = btn.nextElementSibling;
+
+  fetch(`/toggle_like/${post_id}/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const icon = btn.querySelector('i');
+      if (data.liked) {
+        icon.classList.remove('fa-regular');
+        icon.classList.add('fa-solid');
+      } else {
+        icon.classList.remove('fa-solid');
+        icon.classList.add('fa-regular');
+      }
+      like_count.textContent = data.like_count;
+    });
 }
