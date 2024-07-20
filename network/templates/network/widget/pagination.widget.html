@@ -1,0 +1,11 @@
+<nav aria-label="Page navigation example" class="mt-3 d-flex justify-content-center">
+      <ul class="pagination">
+        {% if page_posts.has_previous %}
+          <li class="page-item btn-dark"><a class="btn btn-dark rounded-3" role="button" href="?page={{page_posts.previous_page_number}} ">Previous</a></li>
+        {% endif %}
+        
+        {% if page_posts.has_next %}
+          <li class="page-item "><a class="btn btn-dark rounded-3" role="button" href="?page={{page_posts.next_page_number}} ">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>

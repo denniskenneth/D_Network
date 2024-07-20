@@ -47,7 +47,12 @@ document.addEventListener('DOMContentLoaded', function () {
       toggleLike(btn);
     }
   });
+
+  
+  
 });
+
+
 
 function follow(user_id) {
   fetch(`/follow/${user_id}/`, {

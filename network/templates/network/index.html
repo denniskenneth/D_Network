@@ -23,17 +23,8 @@
     
     {% endfor %}
 
-    <nav aria-label="Page navigation example" class="mt-3 d-flex justify-content-center">
-      <ul class="pagination">
-        {% if page_posts.has_previous %}
-          <li class="page-item"><a class="page-link text-dark" href="?page={{page_posts.previous_page_number}} ">Previous</a></li>
-        {% endif %}
-        
-        {% if page_posts.has_next %}
-          <li class="page-item"><a class="page-link text-dark" href="?page={{page_posts.next_page_number}} ">Next</a></li>
-        {% endif %}
-      </ul>
-    </nav>
+    {% include "network/widget/pagination.widget.html" with page_posts=page_posts %}
+    
   </div>
 </div>
 {% endblock %}
